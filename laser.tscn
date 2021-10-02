@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://laser.gd" type="Script" id=1]
 
@@ -72,6 +72,38 @@ size = Vector3( 0.05, 0.05, 0.05 )
 offsets = PoolRealArray( 0.0134228, 0.14094, 0.778524, 1 )
 colors = PoolColorArray( 1, 1, 1, 1, 1, 0.952166, 0.519531, 1, 1, 0, 0, 1, 0, 0, 0, 1 )
 
+[sub_resource type="BoxShape" id=9]
+extents = Vector3( 0.4, 0.8, 0.8 )
+
+[sub_resource type="Animation" id=10]
+resource_name = "idle"
+length = 2.0
+loop = true
+tracks/0/type = "value"
+tracks/0/path = NodePath("CSGCylinder3:rotation_degrees")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 90 ), Vector3( 360, 0, 90 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("CSGCylinder2:rotation_degrees")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 2 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Vector3( 0, 0, 90 ), Vector3( -360, 0, 90 ) ]
+}
+
 [node name="Spatial" type="Spatial"]
 script = ExtResource( 1 )
 
@@ -95,3 +127,45 @@ spread = 66.29
 initial_velocity = 4.0
 initial_velocity_random = 0.44
 color_ramp = SubResource( 8 )
+
+[node name="StaticBody" type="StaticBody" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0, 0 )
+shape = SubResource( 9 )
+
+[node name="CSGCylinder2" type="CSGCylinder" parent="."]
+transform = Transform( -4.37114e-08, -1, 0, 0.401923, -1.75686e-08, -0.915673, 0.915673, -4.00254e-08, 0.401923, 0, 0, 0 )
+height = 0.7
+sides = 32
+
+[node name="CSGBox" type="CSGBox" parent="CSGCylinder2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
+operation = 2
+width = 0.5
+depth = 0.5
+
+[node name="CSGBox2" type="CSGBox" parent="CSGCylinder2"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0 )
+operation = 2
+width = 0.5
+depth = 0.5
+
+[node name="CSGCylinder3" type="CSGCylinder" parent="."]
+transform = Transform( -4.37114e-08, -1, 0, 0.401923, -1.75686e-08, 0.915673, -0.915673, 4.00254e-08, 0.401923, 0.48539, 0, 0 )
+radius = 0.7
+height = 0.168955
+sides = 32
+
+[node name="CSGCylinder" type="CSGCylinder" parent="CSGCylinder3"]
+operation = 2
+radius = 0.5
+sides = 32
+
+[node name="CSGBox" type="CSGBox" parent="CSGCylinder3"]
+operation = 2
+width = 0.3
+height = 0.2
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+anims/idle = SubResource( 10 )

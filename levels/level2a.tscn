@@ -1,0 +1,36 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://win_trigger.tscn" type="PackedScene" id=1]
+[ext_resource path="res://plate.tscn" type="PackedScene" id=2]
+[ext_resource path="res://level.gd" type="Script" id=3]
+[ext_resource path="res://ad.obj" type="ArrayMesh" id=4]
+
+[sub_resource type="BoxShape" id=1]
+extents = Vector3( 1, 0.191562, 4.91232 )
+
+[node name="Spatial" type="Spatial"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0 )
+script = ExtResource( 3 )
+next_level = "res://levels/level3.tscn"
+
+[node name="Spatial" parent="." instance=ExtResource( 2 )]
+
+[node name="Spatial4" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 8 )
+
+[node name="ad" type="MeshInstance" parent="."]
+transform = Transform( -1.74846e-08, 0, -0.4, 0, 0.584, 0, 0.4, 0, -1.74846e-08, -1.05053, -0.0104959, 2.81351 )
+mesh = ExtResource( 4 )
+material/0 = null
+material/1 = null
+material/2 = null
+material/3 = null
+material/4 = null
+material/5 = null
+material/6 = null
+
+[node name="StaticBody" type="StaticBody" parent="."]
+
+[node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.192208, 5.73716 )
+shape = SubResource( 1 )

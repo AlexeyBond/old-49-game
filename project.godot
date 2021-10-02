@@ -8,6 +8,16 @@
 
 config_version=4
 
+_global_script_classes=[ {
+"base": "Spatial",
+"class": "Level",
+"language": "GDScript",
+"path": "res://level.gd"
+} ]
+_global_script_class_icons={
+"Level": ""
+}
+
 [application]
 
 config/name="old-49-game"

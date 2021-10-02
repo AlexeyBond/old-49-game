@@ -93,7 +93,7 @@ func on_restart():
 	get_tree().call_group('light_manager', 'force_on')
 
 func request_next_level():
-	pass
+	get_tree().call_group('level_manager', 'next_level')
 
 func on_hit_laser():
 	if state != 'idle' and state != 'moving':
