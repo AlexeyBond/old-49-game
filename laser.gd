@@ -12,6 +12,15 @@ func _ready():
 
 
 func _process(delta):
+	var enabled = get_tree().get_nodes_in_group('light_manager')[0].laser_state;
+	
+	if not enabled:
+		$CPUParticles.emitting = false
+		$CSGCylinder.visible = false
+		return
+	else:
+		$CSGCylinder.visible = true
+
 	var cp = $RayCast.get_collision_point()
 	if not $RayCast.is_colliding():
 		cp = $RayCast.global_transform * Vector3(0, 100, 0)

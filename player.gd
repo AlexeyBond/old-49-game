@@ -26,6 +26,7 @@ func start_idle():
 	if not $KinematicBody.test_move($KinematicBody.transform, Vector3(0, -2, 0)):
 		state = 'falling'
 		$AnimationPlayer.play("fall")
+		get_tree().call_group('light_manager', 'force_on')
 		return
 
 func try_move(dir: Vector3):
@@ -89,6 +90,7 @@ func _process(delta):
 func on_restart():
 	$KinematicBody.translation = Vector3.ZERO
 	$camera_wrapper.translation = Vector3.ZERO
+	get_tree().call_group('light_manager', 'force_on')
 
 func request_next_level():
 	pass
@@ -104,3 +106,7 @@ func on_hit_laser():
 func on_win():
 	state = 'winning'
 	$AnimationPlayer.play("win")
+	get_tree().call_group('light_manager', 'force_on')
+
+func on_switch():
+	get_tree().call_group('light_manager', 'toggle')
