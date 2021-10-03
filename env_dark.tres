@@ -2,3 +2,8 @@
 
 [resource]
 background_mode = 1
+glow_enabled = true
+glow_levels/2 = true
+glow_levels/5 = false
+glow_blend_mode = 1
+glow_hdr_luminance_cap = 3.61
