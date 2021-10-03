@@ -1,14 +1,13 @@
 [gd_scene load_steps=3 format=2]
 
-[sub_resource type="GDScript" id=2]
+[sub_resource type="GDScript" id=1]
 script/source = "extends Spatial
 
 func _ready():
 	$AnimationPlayer.play(\"idle\")
 "
 
-[sub_resource type="Animation" id=1]
-resource_name = "idle"
+[sub_resource type="Animation" id=2]
 length = 30.0
 loop = true
 step = 1.0
@@ -25,8 +24,8 @@ tracks/0/keys = {
 "values": [ Vector3( 0, 0, 0 ), Vector3( 0, 360, 0 ), Vector3( 0, 180, 0 ), Vector3( 0, 360, 0 ) ]
 }
 
-[node name="Spatial" type="Spatial"]
-script = SubResource( 2 )
+[node name="Spinner" type="Spatial"]
+script = SubResource( 1 )
 
 [node name="CSGCylinder" type="CSGCylinder" parent="."]
 transform = Transform( 0.961052, 0, -0.276368, 0, 1, 0, 0.276368, 0, 0.961052, 0, 1, 0 )
@@ -47,4 +46,4 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1 )
 operation = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/idle = SubResource( 1 )
+anims/idle = SubResource( 2 )

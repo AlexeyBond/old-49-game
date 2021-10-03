@@ -11,6 +11,7 @@
 [node name="Spatial" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0 )
 script = ExtResource( 5 )
+next_level = "res://levels/level12.tscn"
 
 [node name="Spatial" parent="." instance=ExtResource( 2 )]
 
