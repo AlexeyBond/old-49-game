@@ -7,7 +7,7 @@
 [node name="Spatial" type="Spatial"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2, 0 )
 script = ExtResource( 3 )
-next_level = "res://levels/level2a.tscn"
+next_level = "res://levels/level3.tscn"
 
 [node name="Spatial" parent="." instance=ExtResource( 2 )]
 

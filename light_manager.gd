@@ -37,3 +37,7 @@ func force_on():
 func _ready():
 	add_to_group('light_manager')
 	force_on()
+
+func _process(delta):
+	if Input.is_action_pressed("ui_cancel"):
+		get_tree().quit(0)
