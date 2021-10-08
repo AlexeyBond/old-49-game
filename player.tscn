@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://player.gd" type="Script" id=1]
+[ext_resource path="res://addons/swipe-detector/swipe_detector.tscn" type="PackedScene" id=2]
 
 [sub_resource type="BoxShape" id=1]
 extents = Vector3( 0.9, 0.9, 0.9 )
@@ -229,6 +230,7 @@ color = Color( 1, 1, 1, 1 )
 shape = SubResource( 1 )
 
 [node name="CSGBox" type="CSGBox" parent="KinematicBody"]
+calculate_tangents = false
 material = SubResource( 2 )
 
 [node name="camera_wrapper" type="Spatial" parent="."]
@@ -257,3 +259,10 @@ anims/explode = SubResource( 3 )
 anims/fall = SubResource( 4 )
 anims/idle = SubResource( 5 )
 anims/win = SubResource( 6 )
+
+[node name="SwipeDetector" parent="." instance=ExtResource( 2 )]
+distance_threshold = 10.0
+duration_threshold = 0.01
+directions_mode = "Four Directions"
+
+[connection signal="swiped" from="SwipeDetector" to="." method="_on_swiped"]

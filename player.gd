@@ -19,6 +19,8 @@ func on_done_moving():
 	if state == 'moving':
 		start_idle()
 
+var next_move = null
+
 func start_idle():
 	state = 'idle'
 	$AnimationPlayer.play("idle")
@@ -28,6 +30,10 @@ func start_idle():
 		$AnimationPlayer.play("fall")
 		get_tree().call_group('light_manager', 'force_on')
 		return
+		
+	if next_move:
+		try_move(next_move)
+		next_move = null
 
 func try_move(dir: Vector3):
 	if $KinematicBody.test_move($KinematicBody.transform, dir):
@@ -68,6 +74,12 @@ func try_move(dir: Vector3):
 	);
 	$Tween.start();
 
+func may_be_try_move(dir):
+	if state == 'idle':
+		try_move(dir);
+	else:
+		next_move = dir
+
 const LEFT = Vector3(1,0,0);
 const RIGHT = -LEFT;
 const FRONT = Vector3(0,0,1);
@@ -77,19 +89,23 @@ func _ready():
 	$AnimationPlayer.play("idle")
 
 func _process(delta):
+	var m = 'is_action_just_pressed'
 	if state == 'idle':
-		if Input.is_action_pressed("ui_right"):
-			try_move(RIGHT);
-		elif Input.is_action_pressed("ui_left"):
-			try_move(LEFT);
-		elif Input.is_action_pressed("ui_up"):
-			try_move(FRONT);
-		elif Input.is_action_pressed("ui_down"):
-			try_move(BACK);
+		m = 'is_action_pressed'
+	
+	if Input.call(m, "ui_right"):
+		may_be_try_move(RIGHT);
+	elif Input.call(m, "ui_left"):
+		may_be_try_move(LEFT);
+	elif Input.call(m, "ui_up"):
+		may_be_try_move(FRONT);
+	elif Input.call(m, "ui_down"):
+		may_be_try_move(BACK);
 
 func on_restart():
 	$KinematicBody.translation = Vector3.ZERO
 	$camera_wrapper.translation = Vector3.ZERO
+	next_move = null
 	get_tree().call_group('light_manager', 'force_on')
 
 func request_next_level():
@@ -110,3 +126,9 @@ func on_win():
 
 func on_switch():
 	get_tree().call_group('light_manager', 'toggle')
+
+
+func _on_swiped(gesture):
+	var d = BACK.rotated(Vector3(0,1,0), gesture.get_direction_index() * 3.14 / 4.0);
+	
+	may_be_try_move(d)
