@@ -1,0 +1,42 @@
+[gd_resource type="VisualShader" load_steps=2 format=2]
+
+[sub_resource type="VisualShaderNodeColorUniform" id=12]
+uniform_name = "color"
+
+[resource]
+code = "shader_type spatial;
+render_mode blend_add, depth_draw_never, cull_disabled, specular_disabled;
+
+uniform vec4 color : hint_color;
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// ColorUniform:2
+	vec3 n_out2p0 = color.rgb;
+	float n_out2p1 = color.a;
+
+// Output:0
+	ALBEDO = n_out2p0;
+	EMISSION = n_out2p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( -343.85, 248.125 )
+modes/blend = 1
+modes/cull = 2
+modes/depth_draw = 2
+modes/specular = 4
+nodes/fragment/2/node = SubResource( 12 )
+nodes/fragment/2/position = Vector2( -240, 260 )
+nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0, 2, 0, 0, 5 )

@@ -1,12 +1,19 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
-[sub_resource type="BoxShape" id=1]
+[ext_resource path="res://models/plate.obj" type="ArrayMesh" id=1]
+
+[sub_resource type="BoxShape" id=2]
 extents = Vector3( 0.9, 0.1, 0.9 )
 
 [node name="Plate" type="Spatial"]
 
+[node name="plate" type="MeshInstance" parent="."]
+mesh = ExtResource( 1 )
+material/0 = null
+
 [node name="CSGBox" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
+visible = false
 width = 1.8
 height = 0.2
 depth = 1.8
@@ -19,6 +26,7 @@ depth = 1.5
 
 [node name="CSGBox3" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
+visible = false
 width = 1.0
 height = 0.2
 depth = 1.0
@@ -30,6 +38,7 @@ depth = 0.7
 
 [node name="CSGBox2" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
+visible = false
 width = 0.3
 height = 0.2
 depth = 0.3
@@ -38,4 +47,4 @@ depth = 0.3
 
 [node name="CollisionShape" type="CollisionShape" parent="StaticBody"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
-shape = SubResource( 1 )
+shape = SubResource( 2 )

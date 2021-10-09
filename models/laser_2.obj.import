@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/laser_2.obj-063fcaa85abecbfe5be49dd5db6db6a7.mesh"
+
+[deps]
+
+files=[ "res://.import/laser_2.obj-063fcaa85abecbfe5be49dd5db6db6a7.mesh" ]
+
+source_file="res://models/laser_2.obj"
+dest_files=[ "res://.import/laser_2.obj-063fcaa85abecbfe5be49dd5db6db6a7.mesh", "res://.import/laser_2.obj-063fcaa85abecbfe5be49dd5db6db6a7.mesh" ]
+
+[params]
+
+generate_tangents=false
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

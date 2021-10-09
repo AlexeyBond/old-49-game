@@ -1,14 +1,13 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://laser.gd" type="Script" id=1]
+[ext_resource path="res://laser_shader.tres" type="Shader" id=2]
+[ext_resource path="res://models/laser_2.obj" type="ArrayMesh" id=4]
+[ext_resource path="res://models/laser_1.obj" type="ArrayMesh" id=5]
 
-[sub_resource type="SpatialMaterial" id=1]
-albedo_color = Color( 4, 0.15, 0.15, 1 )
-emission_enabled = true
-emission = Color( 1, 0, 0, 1 )
-emission_energy = 9.77
-emission_operator = 0
-emission_on_uv2 = false
+[sub_resource type="ShaderMaterial" id=14]
+shader = ExtResource( 2 )
+shader_param/color = Color( 1, 0.0235294, 0.0235294, 1 )
 
 [sub_resource type="VisualShaderNodeInput" id=2]
 input_name = "color"
@@ -16,12 +15,12 @@ input_name = "color"
 [sub_resource type="VisualShaderNodeVectorOp" id=3]
 operator = 2
 
-[sub_resource type="VisualShaderNodeScalarConstant" id=4]
-constant = 10.0
+[sub_resource type="VisualShaderNodeInput" id=11]
+input_name = "alpha"
 
 [sub_resource type="VisualShader" id=5]
 code = "shader_type spatial;
-render_mode specular_schlick_ggx;
+render_mode blend_add, specular_schlick_ggx;
 
 
 
@@ -35,14 +34,15 @@ void fragment() {
 // Input:2
 	vec3 n_out2p0 = COLOR.rgb;
 
-// Scalar:4
-	float n_out4p0 = 10.000000;
+// Input:5
+	float n_out5p0 = COLOR.a;
 
 // VectorOp:3
-	vec3 n_out3p0 = n_out2p0 * vec3(n_out4p0);
+	vec3 n_out3p0 = n_out2p0 * vec3(n_out5p0);
 
 // Output:0
 	ALBEDO = n_out2p0;
+	ALPHA = n_out5p0;
 	EMISSION = n_out3p0;
 
 }
@@ -52,14 +52,15 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -540.929, 120.581 )
+graph_offset = Vector2( -388.7, 155.625 )
+modes/blend = 1
 nodes/fragment/2/node = SubResource( 2 )
 nodes/fragment/2/position = Vector2( -198.929, 248.581 )
 nodes/fragment/3/node = SubResource( 3 )
 nodes/fragment/3/position = Vector2( 180, 240 )
-nodes/fragment/4/node = SubResource( 4 )
-nodes/fragment/4/position = Vector2( -40, 340 )
-nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0, 3, 0, 0, 5, 2, 0, 3, 0, 4, 0, 3, 1 )
+nodes/fragment/5/node = SubResource( 11 )
+nodes/fragment/5/position = Vector2( -200, 180 )
+nodes/fragment/connections = PoolIntArray( 3, 0, 0, 5, 2, 0, 3, 0, 5, 0, 0, 1, 2, 0, 0, 0, 5, 0, 3, 1 )
 
 [sub_resource type="ShaderMaterial" id=6]
 shader = SubResource( 5 )
@@ -69,8 +70,8 @@ material = SubResource( 6 )
 size = Vector3( 0.05, 0.05, 0.05 )
 
 [sub_resource type="Gradient" id=8]
-offsets = PoolRealArray( 0.0134228, 0.14094, 0.778524, 1 )
-colors = PoolColorArray( 1, 1, 1, 1, 1, 0.952166, 0.519531, 1, 1, 0, 0, 1, 0, 0, 0, 1 )
+offsets = PoolRealArray( 0.0134228, 0.0656716, 0.778524, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 0.952166, 0.519531, 1, 1, 0, 0, 1, 1, 0, 0, 0 )
 
 [sub_resource type="BoxShape" id=9]
 extents = Vector3( 0.4, 0.8, 0.8 )
@@ -80,7 +81,7 @@ resource_name = "idle"
 length = 2.0
 loop = true
 tracks/0/type = "value"
-tracks/0/path = NodePath("CSGCylinder3:rotation_degrees")
+tracks/0/path = NodePath("laser_1:rotation_degrees")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/imported = false
@@ -89,10 +90,10 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 2 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 0, 90 ), Vector3( 360, 0, 90 ) ]
+"values": [ Vector3( 0, 0, 0 ), Vector3( -360, 0, 0 ) ]
 }
 tracks/1/type = "value"
-tracks/1/path = NodePath("CSGCylinder2:rotation_degrees")
+tracks/1/path = NodePath("laser_2:rotation_degrees")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/imported = false
@@ -101,7 +102,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 2 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 0, 90 ), Vector3( -360, 0, 90 ) ]
+"values": [ Vector3( 0, 0, 0 ), Vector3( 360, 0, 0 ) ]
 }
 
 [node name="Laser" type="Spatial"]
@@ -111,7 +112,7 @@ script = ExtResource( 1 )
 transform = Transform( -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0.5, 0, 0 )
 radius = 0.05
 sides = 6
-material = SubResource( 1 )
+material = SubResource( 14 )
 
 [node name="RayCast" type="RayCast" parent="."]
 enabled = true
@@ -134,38 +135,15 @@ color_ramp = SubResource( 8 )
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.45, 0, 0 )
 shape = SubResource( 9 )
 
-[node name="CSGCylinder2" type="CSGCylinder" parent="."]
-transform = Transform( -4.37114e-08, -1, 0, 0.401923, -1.75686e-08, -0.915673, 0.915673, -4.00254e-08, 0.401923, 0, 0, 0 )
-height = 0.7
-sides = 32
-
-[node name="CSGBox" type="CSGBox" parent="CSGCylinder2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )
-operation = 2
-width = 0.5
-depth = 0.5
-
-[node name="CSGBox2" type="CSGBox" parent="CSGCylinder2"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0 )
-operation = 2
-width = 0.5
-depth = 0.5
-
-[node name="CSGCylinder3" type="CSGCylinder" parent="."]
-transform = Transform( -4.37114e-08, -1, 0, 0.401923, -1.75686e-08, 0.915673, -0.915673, 4.00254e-08, 0.401923, 0.48539, 0, 0 )
-radius = 0.7
-height = 0.168955
-sides = 32
-
-[node name="CSGCylinder" type="CSGCylinder" parent="CSGCylinder3"]
-operation = 2
-radius = 0.5
-sides = 32
-
-[node name="CSGBox" type="CSGBox" parent="CSGCylinder3"]
-operation = 2
-width = 0.3
-height = 0.2
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/idle = SubResource( 10 )
+
+[node name="laser_1" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+mesh = ExtResource( 5 )
+material/0 = null
+
+[node name="laser_2" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.580841, 0, 0 )
+mesh = ExtResource( 4 )
+material/0 = null
