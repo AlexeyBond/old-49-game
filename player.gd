@@ -59,7 +59,7 @@ func try_move(dir: Vector3):
 		Tween.TRANS_LINEAR, Tween.EASE_IN_OUT,
 		0.125
 	);
-	$Tween.interpolate_callback(self, 1.0, 'on_done_moving');
+	$Tween.interpolate_callback(self, 0.5, 'on_done_moving');
 	$Tween.interpolate_property(
 		$KinematicBody/CSGBox, "scale",
 		Vector3.ONE, Vector3.ONE + dir.abs(),
