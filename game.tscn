@@ -1,0 +1,13 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://game.gd" type="Script" id=1]
+[ext_resource path="res://player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://light_manager.tscn" type="PackedScene" id=3]
+
+[node name="Spatial" type="Spatial"]
+script = ExtResource( 1 )
+first_level = "res://levels/level1.tscn"
+
+[node name="player" parent="." instance=ExtResource( 2 )]
+
+[node name="light_manager" parent="." instance=ExtResource( 3 )]
