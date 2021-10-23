@@ -1,13 +1,15 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://levels/level1.tscn" type="PackedScene" id=1]
 [ext_resource path="res://light_manager.tscn" type="PackedScene" id=2]
 [ext_resource path="res://ui/level_entry.tscn" type="PackedScene" id=3]
+[ext_resource path="res://ui/img/close-normal.svg" type="Texture" id=4]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Control
 
 var level_entry_scene = preload(\"res://ui/level_entry.tscn\")
+var locked_level_preview_scene = preload(\"res://locked_level.tscn\")
 
 onready var preview_container = $preview/Viewport
 onready var level_entries_container = $ScrollContainer/VBoxContainer
@@ -63,14 +65,19 @@ func set_preview_entry(entry):
 	if current_selected_entry:
 		current_selected_entry.set_selected(false)
 
-	var present = preview_container.get_node(\"level\")
-	if present:
-		present.free()
-	
-	var new_preview: Spatial = load(entry.level.level_scene).instance()
-	new_preview.name = \"level\"
+	if entry.open or current_selected_entry.open:
+		var present = preview_container.get_node(\"level\")
+		if present:
+			present.free()
+		
+		var preview_scene = locked_level_preview_scene
+		if entry.open:
+			preview_scene = load(entry.level.level_scene)
 
-	preview_container.add_child(new_preview)
+		var new_preview: Spatial = preview_scene.instance()
+		new_preview.name = \"level\"
+
+		preview_container.add_child(new_preview)
 	
 	current_selected_entry = entry
 	entry.set_selected(true)
@@ -124,6 +131,13 @@ script/source = "extends AnimationPlayer
 
 func _ready():
 	play(\"idle\")
+"
+
+[sub_resource type="GDScript" id=5]
+script/source = "extends TextureButton
+
+func _on_close_button_pressed():
+	get_tree().quit(0)
 "
 
 [node name="level_list" type="Control"]
@@ -254,3 +268,18 @@ anchor_bottom = 0.0
 margin_top = 1320.0
 margin_right = 500.0
 margin_bottom = 1448.0
+
+[node name="close_button" type="TextureButton" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+margin_left = -96.0
+margin_top = 32.0
+margin_right = -32.0
+margin_bottom = 96.0
+texture_normal = ExtResource( 4 )
+script = SubResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="close_button" to="close_button" method="_on_close_button_pressed"]

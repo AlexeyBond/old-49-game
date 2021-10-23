@@ -9,6 +9,9 @@
 [sub_resource type="GDScript" id=1]
 script/source = "extends Panel
 
+var style_default = preload(\"res://ui/styles/panel_default.stylebox\")
+var style_highlighted = preload(\"res://ui/styles/panel_highlighted.stylebox\")
+
 var level: LevelMeta = null
 var progress = null#: LevelProgressData
 var open = true
@@ -19,7 +22,10 @@ func _ready():
 		$Label.text = level.title
 
 func _gui_input(event):
-	if event is InputEventMouse:
+	if event is InputEventMouse and (\\
+		(not OS.has_touchscreen_ui_hint()) or \\
+		event is InputEventMouseButton and not event.is_pressed()
+	):
 		get_tree().set_input_as_handled()
 		emit_signal(\"on_selected\", self)
 
@@ -32,7 +38,10 @@ func _on_play_button_pressed():
 	emit_signal(\"on_play\", self);
 
 func set_selected(selected: bool):
-	pass
+	var style = style_default
+	if selected:
+		style = style_highlighted
+	add_stylebox_override('panel', style)
 "
 
 [node name="level_entry" type="Panel"]
