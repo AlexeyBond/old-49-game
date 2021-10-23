@@ -1,0 +1,75 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://ui/img/level-play-normal.svg" type="Texture" id=1]
+[ext_resource path="res://ui/img/level-play-hover.svg" type="Texture" id=2]
+[ext_resource path="res://ui/img/level-play-pressed.svg" type="Texture" id=3]
+[ext_resource path="res://ui/img/level-play-disabled.svg" type="Texture" id=4]
+[ext_resource path="res://ui/theme.tres" type="Theme" id=5]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Panel
+
+var level: LevelMeta = null
+var progress = null#: LevelProgressData
+var open = true
+
+func _ready():
+	$play_button.disabled = not open
+	if level:
+		$Label.text = level.title
+
+func _gui_input(event):
+	if event is InputEventMouse:
+		get_tree().set_input_as_handled()
+		emit_signal(\"on_selected\", self)
+
+
+signal on_selected(entry);
+signal on_play(entry);
+
+
+func _on_play_button_pressed():
+	emit_signal(\"on_play\", self);
+
+func set_selected(selected: bool):
+	pass
+"
+
+[node name="level_entry" type="Panel"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_bottom = -500.0
+rect_min_size = Vector2( 0, 128 )
+mouse_filter = 1
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme = ExtResource( 5 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="."]
+margin_left = 10.0
+margin_top = 10.0
+text = "Level title"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="play_button" type="TextureButton" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -128.0
+mouse_filter = 1
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 3 )
+texture_hover = ExtResource( 2 )
+texture_disabled = ExtResource( 4 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="play_button" to="." method="_on_play_button_pressed"]

@@ -1,0 +1,76 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://metadata/LevelMeta.gd" type="Script" id=1]
+[ext_resource path="res://metadata/ChapterMeta.gd" type="Script" id=2]
+
+[node name="metadata" type="Node"]
+
+[node name="chapter1" type="Node" parent="."]
+script = ExtResource( 2 )
+title = "Chapter 1"
+
+[node name="level1" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level1.tscn"
+title = "Level 1"
+
+[node name="level2" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level2.tscn"
+title = "Level 2"
+
+[node name="level3" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level3.tscn"
+title = "Level 3"
+
+[node name="level4" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level4.tscn"
+title = "Level 4"
+
+[node name="level5" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level5.tscn"
+title = "Level 5"
+
+[node name="level6" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level6.tscn"
+title = "Level 6"
+
+[node name="level7" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "	"
+}
+level_scene = "res://levels/level7.tscn"
+title = "Level 7"
+
+[node name="level8" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level8.tscn"
+title = "Level 8"
+
+[node name="level9" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+__meta__ = {
+"_editor_description_": "	"
+}
+level_scene = "res://levels/level9.tscn"
+title = "Level 9"
+
+[node name="level10" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level10.tscn"
+title = "Level 10"
+
+[node name="level11" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level11.tscn"
+title = "Level 11"
+
+[node name="level12" type="Node" parent="chapter1"]
+script = ExtResource( 1 )
+level_scene = "res://levels/level12.tscn"
+title = "Level 12"

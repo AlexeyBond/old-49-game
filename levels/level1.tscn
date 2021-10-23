@@ -4,7 +4,7 @@
 [ext_resource path="res://plate.tscn" type="PackedScene" id=2]
 [ext_resource path="res://level.gd" type="Script" id=3]
 
-[sub_resource type="GDScript" id=5]
+[sub_resource type="GDScript" id=1]
 script/source = "extends Timer
 
 
@@ -25,14 +25,13 @@ func _on_Timer_timeout():
 
 [sub_resource type="Theme" id=2]
 
-[sub_resource type="StyleBoxFlat" id=1]
+[sub_resource type="StyleBoxFlat" id=3]
 corner_radius_top_left = 25
 corner_radius_top_right = 25
 corner_radius_bottom_right = 25
 corner_radius_bottom_left = 25
 
-[sub_resource type="Animation" id=3]
-resource_name = "swipe"
+[sub_resource type="Animation" id=4]
 length = 2.0
 loop = true
 tracks/0/type = "value"
@@ -72,7 +71,7 @@ tracks/2/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="GDScript" id=4]
+[sub_resource type="GDScript" id=5]
 script/source = "extends AnimationPlayer
 
 func _ready():
@@ -114,7 +113,7 @@ __meta__ = {
 [node name="Timer" type="Timer" parent="CanvasLayer/Popup"]
 one_shot = true
 autostart = true
-script = SubResource( 5 )
+script = SubResource( 1 )
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Popup"]
 anchor_right = 1.0
@@ -152,14 +151,14 @@ __meta__ = {
 [node name="Panel2" type="Panel" parent="CanvasLayer/Popup/Panel/Control"]
 margin_left = -50.0
 rect_min_size = Vector2( 50, 50 )
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="CanvasLayer/Popup/Panel/Control"]
-anims/swipe = SubResource( 3 )
-script = SubResource( 4 )
+anims/swipe = SubResource( 4 )
+script = SubResource( 5 )
 
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 300, 100 )

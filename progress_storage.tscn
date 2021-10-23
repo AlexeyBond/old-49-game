@@ -1,0 +1,101 @@
+[gd_scene load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Node
+
+
+class ChapterProgressData extends Reference:
+	var chapter_meta
+	var resource_path
+	var data
+
+	func _init(chapter_meta):
+		self.chapter_meta = chapter_meta
+		self.resource_path = \"user://progress/%s.json\" % [chapter_meta.get_id()]
+		self.data = self.read_()
+		self.fill_defaults_(self.data)
+
+	func read_():
+		print(\"Reading progress data from \", self.resource_path)
+		var file = File.new()
+		if file.open(self.resource_path, file.READ):
+			return {}
+
+		var parse_res = JSON.parse(file.get_as_text())
+		
+		file.close()
+
+		if parse_res.error:
+			return {}
+		
+		return parse_res.result
+	
+	func write():
+		print(\"Writing progress data to \", self.resource_path)
+		var file = File.new()
+
+		if file.open(self.resource_path, file.WRITE):
+			print(\"Failed to open \", self.resource_path)
+			return
+		
+		file.store_string(JSON.print(self.data), '  ')
+		file.close()
+
+
+	func fill_default_value_(dict: Dictionary, key: String, value):
+		if key in dict:
+			return dict[key]
+		else:
+			dict[key] = value
+			return value
+
+	func fill_defaults_(data: Dictionary):
+		var levels_data = self.fill_default_value_(data, 'levels', {})
+
+		for level_meta in self.chapter_meta.get_levels():
+			var level_id = level_meta.get_id()
+			var level_data = self.fill_default_value_(levels_data, level_id, {})
+
+			self.fill_default_value_(level_data, 'completed', false)
+			self.fill_default_value_(level_data, 'time_spent', 0)
+	
+	func get_level_progress(level):
+		return LevelProgressData.new(self, level)
+
+class LevelProgressData extends Reference:
+	var chapter_progress
+	var level
+	var level_data
+
+	func _init(chapter_progress: ChapterProgressData, level):
+		self.chapter_progress = chapter_progress
+		self.level = level
+		self.level_data = chapter_progress.data['levels'][level.get_id()]
+	
+	func write():
+		self.chaapter_progress.write()
+	
+	func is_completed():
+		return self.level_data['completed']
+		
+	func mark_completed():
+		self.level_data['completed'] = true
+	
+	func get_spent_time():
+		return self.level_data['time_spent']
+
+	func track_spent_time(time):
+		self.level_data['time_spent'] = self.level_data['time_spent'] + time
+
+
+
+func _ready():
+	pass
+
+
+func load_chapter_progress(chapter):
+	return ChapterProgressData.new(chapter)
+"
+
+[node name="Node" type="Node"]
+script = SubResource( 1 )

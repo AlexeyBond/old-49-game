@@ -3,7 +3,7 @@
 [ext_resource path="res://light_manager.gd" type="Script" id=1]
 [ext_resource path="res://env_default.tres" type="Environment" id=2]
 
-[sub_resource type="Animation" id=3]
+[sub_resource type="Animation" id=1]
 resource_name = "force_on"
 length = 0.3
 tracks/0/type = "value"
@@ -58,8 +58,7 @@ tracks/1/keys = {
 "values": [ false, true, false ]
 }
 
-[sub_resource type="Animation" id=1]
-resource_name = "on"
+[sub_resource type="Animation" id=3]
 step = 0.05
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:light_state")
@@ -91,9 +90,9 @@ script = ExtResource( 1 )
 light_state = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/force_on = SubResource( 3 )
+anims/force_on = SubResource( 1 )
 anims/off = SubResource( 2 )
-anims/on = SubResource( 1 )
+anims/on = SubResource( 3 )
 
 [node name="DirectionalLight" type="DirectionalLight" parent="."]
 transform = Transform( 0.861912, -0.180448, -0.473862, 0.48352, 0.0110693, 0.875264, -0.152694, -0.983522, 0.0967911, 0, 8.00487, 0 )
