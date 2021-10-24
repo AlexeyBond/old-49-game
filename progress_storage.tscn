@@ -6,8 +6,8 @@ script/source = "extends Node
 
 class ChapterProgressData extends Reference:
 	var chapter_meta
-	var resource_path
-	var data
+	var resource_path: String
+	var data: Dictionary
 
 	func _init(chapter_meta):
 		self.chapter_meta = chapter_meta
@@ -30,15 +30,24 @@ class ChapterProgressData extends Reference:
 		
 		return parse_res.result
 	
+	func ensure_directory_():
+		var dir = Directory.new()
+		dir.make_dir_recursive(self.resource_path.replace(
+			self.resource_path.split('/')[-1], ''
+		))
+	
 	func write():
 		print(\"Writing progress data to \", self.resource_path)
+		self.ensure_directory_()
+
 		var file = File.new()
 
-		if file.open(self.resource_path, file.WRITE):
-			print(\"Failed to open \", self.resource_path)
+		var err = file.open(self.resource_path, file.WRITE)
+		if err:
+			print(\"Failed to open \", self.resource_path, \" code \", err)
 			return
 		
-		file.store_string(JSON.print(self.data), '  ')
+		file.store_string(JSON.print(self.data, '  '))
 		file.close()
 
 
@@ -58,6 +67,8 @@ class ChapterProgressData extends Reference:
 
 			self.fill_default_value_(level_data, 'completed', false)
 			self.fill_default_value_(level_data, 'time_spent', 0)
+			self.fill_default_value_(level_data, 'attempts', 0)
+			self.fill_default_value_(level_data, 'moves', 0)
 	
 	func get_level_progress(level):
 		return LevelProgressData.new(self, level)
@@ -73,7 +84,7 @@ class LevelProgressData extends Reference:
 		self.level_data = chapter_progress.data['levels'][level.get_id()]
 	
 	func write():
-		self.chaapter_progress.write()
+		self.chapter_progress.write()
 	
 	func is_completed():
 		return self.level_data['completed']
@@ -86,6 +97,18 @@ class LevelProgressData extends Reference:
 
 	func track_spent_time(time):
 		self.level_data['time_spent'] = self.level_data['time_spent'] + time
+	
+	func get_attempts_count():
+		return self.level_data['attempts']
+	
+	func add_attempt():
+		self.level_data['attempts'] = self.level_data['attempts'] + 1
+	
+	func get_move_count():
+		return self.level_data['moves']
+	
+	func add_move():
+		self.level_data['moves'] = self.level_data['moves'] + 1
 
 
 

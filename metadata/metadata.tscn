@@ -18,11 +18,13 @@ title = "Level 1"
 script = ExtResource( 1 )
 level_scene = "res://levels/level2.tscn"
 title = "Level 2"
+max_skipped_before = 0
 
 [node name="level3" type="Node" parent="chapter1"]
 script = ExtResource( 1 )
 level_scene = "res://levels/level3.tscn"
 title = "Level 3"
+max_skipped_before = 0
 
 [node name="level4" type="Node" parent="chapter1"]
 script = ExtResource( 1 )

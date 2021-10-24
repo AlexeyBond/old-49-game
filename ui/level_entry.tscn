@@ -1,10 +1,14 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://ui/img/level-play-normal.svg" type="Texture" id=1]
 [ext_resource path="res://ui/img/level-play-hover.svg" type="Texture" id=2]
 [ext_resource path="res://ui/img/level-play-pressed.svg" type="Texture" id=3]
 [ext_resource path="res://ui/img/level-play-disabled.svg" type="Texture" id=4]
 [ext_resource path="res://ui/theme.tres" type="Theme" id=5]
+[ext_resource path="res://ui/img/time.svg" type="Texture" id=6]
+[ext_resource path="res://ui/img/attempts.svg" type="Texture" id=7]
+[ext_resource path="res://ui/img/moves.svg" type="Texture" id=8]
+[ext_resource path="res://ui/img/done_mark.svg" type="Texture" id=9]
 
 [sub_resource type="GDScript" id=1]
 script/source = "extends Panel
@@ -19,7 +23,19 @@ var open = true
 func _ready():
 	$play_button.disabled = not open
 	if level:
-		$Label.text = level.title
+		$title_container/title.text = level.title
+
+	if progress and progress.get_attempts_count() > 0:
+		$title_container/completed_mark.visible = progress.is_completed()
+		var t = progress.get_spent_time()
+		var t_sec = fmod(t, 60.0)
+		var t_min = (t - t_sec) / 60
+		$stats_container/time_spent.text = \"%02d:%02d\" % [t_min, t_sec]
+		$stats_container/attempts.text = str(progress.get_attempts_count())
+		$stats_container/moves.text = str(progress.get_move_count())
+	else:
+		$stats_container.visible = false
+		$title_container/completed_mark.visible = false
 
 func _gui_input(event):
 	if event is InputEventMouse and (\\
@@ -37,9 +53,13 @@ signal on_play(entry);
 func _on_play_button_pressed():
 	emit_signal(\"on_play\", self);
 
+func _on_play_button_focus_entered():
+	emit_signal(\"on_selected\", self)
+
 func set_selected(selected: bool):
 	var style = style_default
 	if selected:
+		$play_button.grab_focus()
 		style = style_highlighted
 	add_stylebox_override('panel', style)
 "
@@ -58,13 +78,83 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Label" type="Label" parent="."]
+[node name="title_container" type="HBoxContainer" parent="."]
 margin_left = 10.0
 margin_top = 10.0
+margin_right = 40.0
+margin_bottom = 40.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title" type="Label" parent="title_container"]
+margin_right = 136.0
+margin_bottom = 38.0
 text = "Level title"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="completed_mark" type="TextureRect" parent="title_container"]
+margin_left = 140.0
+margin_right = 172.0
+margin_bottom = 38.0
+texture = ExtResource( 9 )
+stretch_mode = 4
+
+[node name="stats_container" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 10.0
+margin_top = -64.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="TextureRect" type="TextureRect" parent="stats_container"]
+margin_right = 32.0
+margin_bottom = 64.0
+hint_tooltip = "Time spent"
+texture = ExtResource( 6 )
+stretch_mode = 4
+
+[node name="time_spent" type="Label" parent="stats_container"]
+margin_left = 36.0
+margin_top = 13.0
+margin_right = 116.0
+margin_bottom = 51.0
+text = "00:00"
+
+[node name="TextureRect2" type="TextureRect" parent="stats_container"]
+margin_left = 120.0
+margin_right = 152.0
+margin_bottom = 64.0
+hint_tooltip = "Attempts"
+texture = ExtResource( 7 )
+stretch_mode = 4
+
+[node name="attempts" type="Label" parent="stats_container"]
+margin_left = 156.0
+margin_top = 13.0
+margin_right = 174.0
+margin_bottom = 51.0
+text = "0"
+
+[node name="TextureRect3" type="TextureRect" parent="stats_container"]
+margin_left = 178.0
+margin_right = 210.0
+margin_bottom = 64.0
+hint_tooltip = "Moves count"
+texture = ExtResource( 8 )
+stretch_mode = 4
+
+[node name="moves" type="Label" parent="stats_container"]
+margin_left = 214.0
+margin_top = 13.0
+margin_right = 232.0
+margin_bottom = 51.0
+text = "0"
 
 [node name="play_button" type="TextureButton" parent="."]
 anchor_left = 1.0
@@ -81,4 +171,5 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[connection signal="focus_entered" from="play_button" to="." method="_on_play_button_focus_entered"]
 [connection signal="pressed" from="play_button" to="." method="_on_play_button_pressed"]

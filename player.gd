@@ -35,10 +35,14 @@ func start_idle():
 		try_move(next_move)
 		next_move = null
 
+signal on_move();
+
 func try_move(dir: Vector3):
 	if $KinematicBody.test_move($KinematicBody.transform, dir):
 		return
 	
+	emit_signal("on_move")
+
 	state = 'moving'
 	
 	var current_pos = $KinematicBody.translation;
