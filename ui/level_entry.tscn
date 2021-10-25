@@ -37,13 +37,20 @@ func _ready():
 		$stats_container.visible = false
 		$title_container/completed_mark.visible = false
 
+var tap_start_position = Vector2.ZERO
+
 func _gui_input(event):
-	if event is InputEventMouse and (\\
-		(not OS.has_touchscreen_ui_hint()) or \\
-		event is InputEventMouseButton and not event.is_pressed()
-	):
-		get_tree().set_input_as_handled()
-		emit_signal(\"on_selected\", self)
+	if event is InputEventMouse:
+		if not OS.has_touchscreen_ui_hint():
+			get_tree().set_input_as_handled()
+			emit_signal(\"on_selected\", self)
+		else:
+			if event is InputEventMouseButton:
+				if event.is_pressed():
+					tap_start_position = event.position
+				elif event.position.distance_to(tap_start_position) < 10:
+					get_tree().set_input_as_handled()
+					emit_signal(\"on_selected\", self)
 
 
 signal on_selected(entry);
@@ -126,33 +133,45 @@ margin_right = 116.0
 margin_bottom = 51.0
 text = "00:00"
 
-[node name="TextureRect2" type="TextureRect" parent="stats_container"]
+[node name="spacer1" type="Control" parent="stats_container"]
 margin_left = 120.0
-margin_right = 152.0
+margin_right = 136.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 16, 0 )
+
+[node name="TextureRect2" type="TextureRect" parent="stats_container"]
+margin_left = 140.0
+margin_right = 172.0
 margin_bottom = 64.0
 hint_tooltip = "Attempts"
 texture = ExtResource( 7 )
 stretch_mode = 4
 
 [node name="attempts" type="Label" parent="stats_container"]
-margin_left = 156.0
+margin_left = 176.0
 margin_top = 13.0
-margin_right = 174.0
+margin_right = 194.0
 margin_bottom = 51.0
 text = "0"
 
+[node name="spacer2" type="Control" parent="stats_container"]
+margin_left = 198.0
+margin_right = 214.0
+margin_bottom = 64.0
+rect_min_size = Vector2( 16, 0 )
+
 [node name="TextureRect3" type="TextureRect" parent="stats_container"]
-margin_left = 178.0
-margin_right = 210.0
+margin_left = 218.0
+margin_right = 250.0
 margin_bottom = 64.0
 hint_tooltip = "Moves count"
 texture = ExtResource( 8 )
 stretch_mode = 4
 
 [node name="moves" type="Label" parent="stats_container"]
-margin_left = 214.0
+margin_left = 254.0
 margin_top = 13.0
-margin_right = 232.0
+margin_right = 272.0
 margin_bottom = 51.0
 text = "0"
 

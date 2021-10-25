@@ -1,0 +1,78 @@
+[gd_resource type="ShaderMaterial" load_steps=7 format=2]
+
+[sub_resource type="VisualShaderNodeColorUniform" id=1]
+uniform_name = "idle_color"
+
+[sub_resource type="VisualShaderNodeColorUniform" id=2]
+uniform_name = "emission_color"
+
+[sub_resource type="VisualShaderNodeScalarUniform" id=3]
+uniform_name = "emission_level"
+
+[sub_resource type="VisualShaderNodeVectorScalarMix" id=4]
+
+[sub_resource type="VisualShaderNodeVectorOp" id=5]
+operator = 2
+
+[sub_resource type="VisualShader" id=6]
+code = "shader_type spatial;
+render_mode specular_schlick_ggx;
+
+uniform vec4 idle_color : hint_color;
+uniform vec4 emission_color : hint_color;
+uniform float emission_level;
+
+
+
+void vertex() {
+// Output:0
+
+}
+
+void fragment() {
+// ColorUniform:2
+	vec3 n_out2p0 = idle_color.rgb;
+	float n_out2p1 = idle_color.a;
+
+// ColorUniform:3
+	vec3 n_out3p0 = emission_color.rgb;
+	float n_out3p1 = emission_color.a;
+
+// ScalarUniform:4
+	float n_out4p0 = emission_level;
+
+// VectorScalarMix:5
+	vec3 n_out5p0 = mix(n_out2p0, n_out3p0, n_out4p0);
+
+// VectorOp:6
+	vec3 n_out6p0 = n_out3p0 * vec3(n_out4p0);
+
+// Output:0
+	ALBEDO = n_out5p0;
+	EMISSION = n_out6p0;
+
+}
+
+void light() {
+// Output:0
+
+}
+"
+graph_offset = Vector2( -335.148, 136.594 )
+nodes/fragment/2/node = SubResource( 1 )
+nodes/fragment/2/position = Vector2( -160, 180 )
+nodes/fragment/3/node = SubResource( 2 )
+nodes/fragment/3/position = Vector2( -160, 300 )
+nodes/fragment/4/node = SubResource( 3 )
+nodes/fragment/4/position = Vector2( -189.148, 501.5 )
+nodes/fragment/5/node = SubResource( 4 )
+nodes/fragment/5/position = Vector2( 140, 220 )
+nodes/fragment/6/node = SubResource( 5 )
+nodes/fragment/6/position = Vector2( 153.852, 386.5 )
+nodes/fragment/connections = PoolIntArray( 4, 0, 5, 2, 5, 0, 0, 0, 3, 0, 5, 1, 2, 0, 5, 0, 4, 0, 6, 1, 6, 0, 0, 5, 3, 0, 6, 0 )
+
+[resource]
+shader = SubResource( 6 )
+shader_param/idle_color = Color( 1, 0.980392, 0.819608, 1 )
+shader_param/emission_color = Color( 1, 0.960784, 0, 1 )
+shader_param/emission_level = 1.0

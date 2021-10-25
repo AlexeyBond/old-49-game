@@ -11,7 +11,7 @@ func _ready():
 	$AnimationPlayer.play("idle")
 
 
-func _process(delta):
+func _process(_delta):
 	var enabled = get_tree().get_nodes_in_group('light_manager')[0].laser_state;
 	
 	if not enabled:

@@ -53,7 +53,7 @@ func reload_levels():
 	if not preview_entry:
 		preview_entry = preview_container.get_child(0)
 
-	set_preview_entry(preview_entry)
+	self.call_deferred('set_preview_entry', preview_entry)
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
@@ -111,7 +111,7 @@ func _ready():
 	flip_v = true
 
 
-func _process(delta):
+func _process(_delta):
 	if rect_size != prev_size:
 		prev_size = rect_size
 		viewport.set_size(rect_size)
@@ -169,6 +169,7 @@ __meta__ = {
 
 [node name="Viewport" type="Viewport" parent="preview"]
 size = Vector2( 512, 600 )
+own_world = true
 handle_input_locally = false
 fxaa = true
 gui_disable_input = true

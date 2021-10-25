@@ -112,7 +112,6 @@ __meta__ = {
 
 [node name="Timer" type="Timer" parent="CanvasLayer/Popup"]
 one_shot = true
-autostart = true
 script = SubResource( 1 )
 
 [node name="Panel" type="Panel" parent="CanvasLayer/Popup"]
@@ -163,4 +162,5 @@ script = SubResource( 5 )
 [node name="Viewport" type="Viewport" parent="."]
 size = Vector2( 300, 100 )
 
+[connection signal="on_play" from="." to="CanvasLayer/Popup/Timer" method="start"]
 [connection signal="timeout" from="CanvasLayer/Popup/Timer" to="CanvasLayer/Popup/Timer" method="_on_Timer_timeout"]

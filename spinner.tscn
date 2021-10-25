@@ -31,13 +31,15 @@ script = SubResource( 1 )
 transform = Transform( 0.961052, 0, -0.276368, 0, 1, 0, 0.276368, 0, 0.961052, 0, 1, 0 )
 calculate_tangents = false
 use_collision = true
-sides = 32
+sides = 64
 smooth_faces = false
 
 [node name="CSGCylinder" type="CSGCylinder" parent="CSGCylinder"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 operation = 2
 radius = 0.7
-sides = 32
+sides = 64
+smooth_faces = false
 
 [node name="CSGBox" type="CSGBox" parent="CSGCylinder"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0 )

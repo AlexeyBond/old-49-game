@@ -92,7 +92,7 @@ const BACK = -FRONT;
 func _ready():
 	$AnimationPlayer.play("idle")
 
-func _process(delta):
+func _process(_delta):
 	var m = 'is_action_just_pressed'
 	if state == 'idle':
 		m = 'is_action_pressed'

@@ -30,6 +30,8 @@ func change_level(level):
 		level_progress.add_attempt()
 		level_progress.write()
 	
+	level_node.play()
+	
 	$Timer.stop()
 	$Timer.start()
 
