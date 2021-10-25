@@ -8,7 +8,10 @@ script/source = "extends Spatial
 
 func _ready():
 	$CSGBox2.material = $CSGBox2.material.duplicate()
-	yield(get_tree().create_timer(rand_range(0, 1)), \"timeout\")
+	$Timer.start(rand_range(0, 0.5))
+
+
+func _on_Timer_timeout():
 	$AnimationPlayer.play(\"blink\")
 "
 
@@ -48,3 +51,7 @@ material = ExtResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 anims/blink = SubResource( 8 )
+
+[node name="Timer" type="Timer" parent="."]
+
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]

@@ -9,11 +9,11 @@ class ChapterProgressData extends Reference:
 	var resource_path: String
 	var data: Dictionary
 
-	func _init(chapter_meta):
-		self.chapter_meta = chapter_meta
+	func _init(chapter_meta_):
+		self.chapter_meta = chapter_meta_
 		self.resource_path = \"user://progress/%s.json\" % [chapter_meta.get_id()]
 		self.data = self.read_()
-		self.fill_defaults_(self.data)
+		self.fill_defaults_()
 
 	func read_():
 		print(\"Reading progress data from \", self.resource_path)
@@ -58,7 +58,7 @@ class ChapterProgressData extends Reference:
 			dict[key] = value
 			return value
 
-	func fill_defaults_(data: Dictionary):
+	func fill_defaults_():
 		var levels_data = self.fill_default_value_(data, 'levels', {})
 
 		for level_meta in self.chapter_meta.get_levels():
@@ -78,9 +78,9 @@ class LevelProgressData extends Reference:
 	var level
 	var level_data
 
-	func _init(chapter_progress: ChapterProgressData, level):
-		self.chapter_progress = chapter_progress
-		self.level = level
+	func _init(chapter_progress_: ChapterProgressData, level_):
+		self.chapter_progress = chapter_progress_
+		self.level = level_
 		self.level_data = chapter_progress.data['levels'][level.get_id()]
 	
 	func write():

@@ -12,4 +12,7 @@ func get_chapter():
 	return get_parent()
 
 func get_next():
-	return get_parent().get_child(get_index() + 1)
+	var index = get_index()
+	if index == get_parent().get_child_count() - 1:
+		return null
+	return get_parent().get_child(index + 1)

@@ -10,8 +10,10 @@ var env_default = preload("res://env_default.tres")
 func set_light_state(ls):
 	var ps = light_state
 	light_state = ls
-	if not $WorldEnvironment or not $DirectionalLight:
+	if not is_inside_tree():
 		return
+	#if not $WorldEnvironment or not $DirectionalLight:
+	#	return
 	if ps != ls:
 		if ls:
 			$WorldEnvironment.environment = env_default

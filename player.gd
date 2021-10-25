@@ -7,9 +7,10 @@ var state = 'idle'
 export var color: Color setget set_color, get_color
 
 func set_color(c):
-	var box = $KinematicBody/CSGBox
-	if not box: return
-	box.material.albedo_color = c
+	if not is_inside_tree():
+		return
+
+	$KinematicBody/CSGBox.material.albedo_color = c
 	
 func get_color():
 	return $KinematicBody/CSGBox.material_override.albedo_color
