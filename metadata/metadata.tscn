@@ -1,13 +1,15 @@
-[gd_scene load_steps=3 format=2]
+[gd_scene load_steps=4 format=2]
 
 [ext_resource path="res://metadata/LevelMeta.gd" type="Script" id=1]
 [ext_resource path="res://metadata/ChapterMeta.gd" type="Script" id=2]
+[ext_resource path="res://metadata/icons/chapter1.svg" type="Texture" id=3]
 
 [node name="metadata" type="Node"]
 
 [node name="chapter1" type="Node" parent="."]
 script = ExtResource( 2 )
 title = "Chapter 1"
+icon_image = ExtResource( 3 )
 
 [node name="level1" type="Node" parent="chapter1"]
 script = ExtResource( 1 )
@@ -76,3 +78,9 @@ title = "Level 11"
 script = ExtResource( 1 )
 level_scene = "res://levels/level12.tscn"
 title = "Level 12"
+
+[node name="chapter2" type="Node" parent="."]
+script = ExtResource( 2 )
+title = "Chapter 2"
+icon_image = ExtResource( 3 )
+is_wip = true

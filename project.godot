@@ -33,7 +33,7 @@ _global_script_class_icons={
 [application]
 
 config/name="old-49-game"
-run/main_scene="res://ui/menu.tscn"
+run/main_scene="res://ui/main_menu.tscn"
 config/icon="res://icon.png"
 
 [autoload]

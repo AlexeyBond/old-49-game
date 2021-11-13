@@ -1,0 +1,443 @@
+[gd_scene load_steps=8 format=2]
+
+[ext_resource path="res://ui/fonts/font_24_px.tres" type="DynamicFont" id=1]
+[ext_resource path="res://metadata/icons/chapter1.svg" type="Texture" id=2]
+[ext_resource path="res://ui/theme.tres" type="Theme" id=3]
+[ext_resource path="res://ui/img/chapter-wip-fill.svg" type="Texture" id=4]
+[ext_resource path="res://ui/img/chapter-hover-play.svg" type="Texture" id=5]
+[ext_resource path="res://ui/img/chapter-hover-locked.svg" type="Texture" id=6]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Panel
+
+var chapter_meta: ChapterMeta = null
+var chapter_progress = null
+
+func update_progress_item_from_level_progress(item: ColorRect, completed: bool, locked: bool):
+	if completed:
+		item.color = Color.green
+	elif locked:
+		item.color = Color.darkgray
+	else:
+		item.color = Color.white
+
+func update_progress_view():
+	var progress_icons_container = $progress_icons_container
+	var i = 0
+	var all_levels = chapter_meta.get_levels()
+	var completed_levels = 0
+	var skipped_levels = 0
+	
+	for level in all_levels:
+		var c = progress_icons_container.get_child(i)
+		i += 1;
+		var progress = chapter_progress.get_level_progress(level)
+		
+		var completed = progress.is_completed()
+		
+		update_progress_item_from_level_progress(
+			c,
+			completed,
+			skipped_levels > level.max_skipped_before
+		)
+
+		if completed:
+			completed_levels += 1;
+		else:
+			skipped_levels += 1;
+
+	if completed_levels > 0:
+		var completeness_percent_label = $progress_label_container/progress_value_label;
+		var completeness_percent = int(100.0 * float(completed_levels)/float(completed_levels + skipped_levels))
+		completeness_percent_label.text = \"%d%%\" % completeness_percent
+	else:
+		$progress_label_container.visible = false
+
+func update_view():
+	$title_label.text = chapter_meta.title;
+	$icon.texture = chapter_meta.icon_image
+	
+	update_progress_view()
+	
+	$wip_indicator.visible = chapter_meta.is_wip
+
+
+func _ready():
+	if not chapter_meta or not chapter_progress:
+		queue_free()
+		return
+	
+	update_view()
+
+func is_unlocked():
+	if chapter_meta.is_wip:
+		return false
+	
+	return true
+
+func _on_ChapterEntry_mouse_entered():
+	grab_focus()
+
+
+func _on_ChapterEntry_focus_entered():
+	if not chapter_meta or not chapter_progress:
+		queue_free()
+		return
+
+	if is_unlocked():
+		$hover_play.visible = true
+	else:
+		$hover_locked.visible = true
+
+
+func _on_ChapterEntry_focus_exited():
+	$hover_locked.visible = false
+	$hover_play.visible = false
+
+
+signal selected(meta, progress);
+
+
+func _gui_input(event):
+	if not is_unlocked():
+		return
+
+	if not (event is InputEventMouseButton):
+		return
+	
+	if not event.pressed:
+		return
+
+	emit_signal(\"selected\", chapter_meta, chapter_progress)
+"
+
+[node name="ChapterEntry" type="Panel"]
+margin_right = 300.0
+margin_bottom = 200.0
+rect_min_size = Vector2( 300, 200 )
+focus_mode = 2
+theme = ExtResource( 3 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="title_label" type="Label" parent="."]
+margin_left = 8.0
+margin_top = 8.0
+margin_right = 40.0
+margin_bottom = 14.0
+custom_fonts/font = ExtResource( 1 )
+text = "Chapter 1"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon" type="TextureRect" parent="."]
+anchor_top = 0.45
+anchor_bottom = 0.45
+margin_top = -50.0
+margin_right = 300.0
+margin_bottom = 50.0
+texture = ExtResource( 2 )
+stretch_mode = 5
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="progress_icons_container" type="GridContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 4.0
+margin_top = -36.0
+margin_right = -4.0
+margin_bottom = -4.0
+columns = 12
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="progress_icons_container"]
+margin_right = 20.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect2" type="ColorRect" parent="progress_icons_container"]
+margin_left = 24.0
+margin_right = 44.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect3" type="ColorRect" parent="progress_icons_container"]
+margin_left = 48.0
+margin_right = 68.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect4" type="ColorRect" parent="progress_icons_container"]
+margin_left = 72.0
+margin_right = 92.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect5" type="ColorRect" parent="progress_icons_container"]
+margin_left = 96.0
+margin_right = 116.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect6" type="ColorRect" parent="progress_icons_container"]
+margin_left = 120.0
+margin_right = 140.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect7" type="ColorRect" parent="progress_icons_container"]
+margin_left = 144.0
+margin_right = 164.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect8" type="ColorRect" parent="progress_icons_container"]
+margin_left = 168.0
+margin_right = 188.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect9" type="ColorRect" parent="progress_icons_container"]
+margin_left = 192.0
+margin_right = 212.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect10" type="ColorRect" parent="progress_icons_container"]
+margin_left = 216.0
+margin_right = 236.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect11" type="ColorRect" parent="progress_icons_container"]
+margin_left = 240.0
+margin_right = 260.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect12" type="ColorRect" parent="progress_icons_container"]
+margin_left = 264.0
+margin_right = 284.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect13" type="ColorRect" parent="progress_icons_container"]
+margin_top = 18.0
+margin_right = 20.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect14" type="ColorRect" parent="progress_icons_container"]
+margin_left = 24.0
+margin_top = 18.0
+margin_right = 44.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect15" type="ColorRect" parent="progress_icons_container"]
+margin_left = 48.0
+margin_top = 18.0
+margin_right = 68.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect16" type="ColorRect" parent="progress_icons_container"]
+margin_left = 72.0
+margin_top = 18.0
+margin_right = 92.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect17" type="ColorRect" parent="progress_icons_container"]
+margin_left = 96.0
+margin_top = 18.0
+margin_right = 116.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect18" type="ColorRect" parent="progress_icons_container"]
+margin_left = 120.0
+margin_top = 18.0
+margin_right = 140.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect19" type="ColorRect" parent="progress_icons_container"]
+margin_left = 144.0
+margin_top = 18.0
+margin_right = 164.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect20" type="ColorRect" parent="progress_icons_container"]
+margin_left = 168.0
+margin_top = 18.0
+margin_right = 188.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect21" type="ColorRect" parent="progress_icons_container"]
+margin_left = 192.0
+margin_top = 18.0
+margin_right = 212.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect22" type="ColorRect" parent="progress_icons_container"]
+margin_left = 216.0
+margin_top = 18.0
+margin_right = 236.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect23" type="ColorRect" parent="progress_icons_container"]
+margin_left = 240.0
+margin_top = 18.0
+margin_right = 260.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="ColorRect24" type="ColorRect" parent="progress_icons_container"]
+margin_left = 264.0
+margin_top = 18.0
+margin_right = 284.0
+margin_bottom = 32.0
+rect_min_size = Vector2( 0, 14 )
+size_flags_horizontal = 3
+color = Color( 1, 1, 1, 0 )
+
+[node name="progress_label_container" type="HBoxContainer" parent="."]
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -0.331421
+margin_top = -66.0
+margin_right = -4.0
+margin_bottom = -40.0
+custom_constants/separation = 0
+alignment = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="progress_value_label" type="Label" parent="progress_label_container"]
+margin_left = 145.0
+margin_right = 189.0
+margin_bottom = 29.0
+custom_fonts/font = ExtResource( 1 )
+text = "42%"
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label2" type="Label" parent="progress_label_container"]
+margin_left = 189.0
+margin_right = 296.0
+margin_bottom = 29.0
+custom_fonts/font = ExtResource( 1 )
+text = " complete"
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="wip_indicator" type="TextureRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 4 )
+stretch_mode = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hover_play" type="TextureRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = ExtResource( 5 )
+stretch_mode = 4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ColorRect" type="ColorRect" parent="hover_play"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color( 0, 0, 0, 0.25098 )
+
+[node name="hover_locked" type="TextureRect" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+texture = ExtResource( 6 )
+stretch_mode = 4
+
+[node name="ColorRect" type="ColorRect" parent="hover_locked"]
+show_behind_parent = true
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color( 0, 0, 0, 0.25098 )
+
+[connection signal="focus_entered" from="." to="." method="_on_ChapterEntry_focus_entered"]
+[connection signal="focus_exited" from="." to="." method="_on_ChapterEntry_focus_exited"]
+[connection signal="mouse_entered" from="." to="." method="_on_ChapterEntry_mouse_entered"]
+[connection signal="gui_input" from="hover_play" to="." method="_on_hover_play_gui_input"]

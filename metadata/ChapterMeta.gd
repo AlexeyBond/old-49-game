@@ -2,6 +2,8 @@ class_name ChapterMeta
 extends Node
 
 export(String) var title;
+export(Texture) var icon_image;
+export(bool) var is_wip = false;
 
 func get_id():
 	var parent = get_parent()

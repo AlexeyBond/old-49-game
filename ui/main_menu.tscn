@@ -1,0 +1,86 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://ui/theme.tres" type="Theme" id=1]
+[ext_resource path="res://ui/chapter_entry.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Control
+
+var chapter_entry_scn = preload(\"res://ui/chapter_entry.tscn\");
+
+var levels_list_scn = preload(\"res://ui/menu.tscn\");
+
+func update_chapter_list():
+	var list_container = $ScrollContainer/HBoxContainer
+	var meta_storage = $\"/root/metadata\"
+	var progress_storage = $\"/root/progress_storage\"
+	var chapters = meta_storage.get_children()
+	
+	for chapter in chapters:
+		var entry = chapter_entry_scn.instance()
+		
+		var progress = progress_storage.load_chapter_progress(chapter)
+		
+		entry.chapter_meta = chapter
+		entry.chapter_progress = progress
+
+		list_container.add_child(entry)
+		
+		entry.connect(\"selected\", self, '_on_chapter_selected')
+
+func _ready():
+	update_chapter_list()
+
+func _on_chapter_selected(chapter_meta, chapter_progress):
+	var levels_list = levels_list_scn.instance();
+	levels_list.chapter = chapter_meta;
+	levels_list.chapter_progress = chapter_progress;
+	
+	get_parent().add_child(levels_list)
+	queue_free()
+"
+
+[node name="chapter_list" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource( 1 )
+script = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ScrollContainer" type="ScrollContainer" parent="."]
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+margin_top = -100.0
+margin_bottom = 100.0
+follow_focus = true
+scroll_vertical_enabled = false
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
+margin_right = 1516.0
+margin_bottom = 200.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ChapterEntry" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
+
+[node name="ChapterEntry2" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
+margin_left = 304.0
+margin_right = 604.0
+
+[node name="ChapterEntry3" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
+margin_left = 608.0
+margin_right = 908.0
+
+[node name="ChapterEntry4" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
+margin_left = 912.0
+margin_right = 1212.0
+
+[node name="ChapterEntry5" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
+margin_left = 1216.0
+margin_right = 1516.0
