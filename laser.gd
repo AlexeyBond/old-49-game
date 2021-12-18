@@ -1,19 +1,15 @@
+class_name RedLaser
 extends Spatial
 
-
-# Declare member variables here. Examples:
-# var a = 2
-# var b = "text"
-
-
-# Called when the node enters the scene tree for the first time.
 func _ready():
 	$AnimationPlayer.play("idle")
 
+func is_enabled():
+	return get_tree().get_nodes_in_group('light_manager')[0].laser_state
 
 func _process(_delta):
-	var enabled = get_tree().get_nodes_in_group('light_manager')[0].laser_state;
-	
+	var enabled = self.is_enabled();
+
 	if not enabled:
 		$CPUParticles.emitting = false
 		$CSGCylinder.visible = false

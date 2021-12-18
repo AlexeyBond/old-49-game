@@ -19,9 +19,7 @@ onready var level_entries_container = $ScrollContainer/VBoxContainer
 onready var progress_storage = $\"/root/progress_storage\"
 
 var chapter_progress = null
-
-# TODO: Set from previous menu when/if there will be more chapters
-onready var chapter = $\"/root/metadata/chapter1\"
+var chapter = null
 
 func reload_levels():
 	for child in level_entries_container.get_children():
@@ -51,7 +49,7 @@ func reload_levels():
 		entry.connect(\"on_play\", self, 'on_entry_play')
 	
 	if not preview_entry:
-		preview_entry = preview_container.get_child(0)
+		preview_entry = level_entries_container.get_child(0)
 
 	self.call_deferred('set_preview_entry', preview_entry)
 

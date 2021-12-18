@@ -9,6 +9,11 @@
 config_version=4
 
 _global_script_classes=[ {
+"base": "RedLaser",
+"class": "BlueLaser",
+"language": "GDScript",
+"path": "res://laser_blue.gd"
+}, {
 "base": "Node",
 "class": "ChapterMeta",
 "language": "GDScript",
@@ -23,11 +28,18 @@ _global_script_classes=[ {
 "class": "LevelMeta",
 "language": "GDScript",
 "path": "res://metadata/LevelMeta.gd"
+}, {
+"base": "Spatial",
+"class": "RedLaser",
+"language": "GDScript",
+"path": "res://laser.gd"
 } ]
 _global_script_class_icons={
+"BlueLaser": "",
 "ChapterMeta": "",
 "Level": "",
-"LevelMeta": ""
+"LevelMeta": "",
+"RedLaser": ""
 }
 
 [application]

@@ -3,19 +3,16 @@
 [ext_resource path="res://material_static.tres" type="Material" id=1]
 [ext_resource path="res://signal_light_material.tres" type="Material" id=2]
 
-[sub_resource type="GDScript" id=9]
+[sub_resource type="GDScript" id=1]
 script/source = "extends Spatial
 
 func _ready():
 	$CSGBox2.material = $CSGBox2.material.duplicate()
-	$Timer.start(rand_range(0, 0.5))
-
-
-func _on_Timer_timeout():
-	$AnimationPlayer.play(\"blink\")
+	$AnimationPlayer.play(\"blink\", -1, rand_range(0.8, 1.2))
+	$AnimationPlayer.seek(rand_range(0.0, $AnimationPlayer.get_animation(\"blink\").length))
 "
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=2]
 resource_name = "blink"
 length = 2.0
 loop = true
@@ -33,7 +30,7 @@ tracks/0/keys = {
 }
 
 [node name="Spatial" type="Spatial"]
-script = SubResource( 9 )
+script = SubResource( 1 )
 
 [node name="CSGBox" type="CSGBox" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
@@ -50,8 +47,4 @@ depth = 0.5
 material = ExtResource( 2 )
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/blink = SubResource( 8 )
-
-[node name="Timer" type="Timer" parent="."]
-
-[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
+anims/blink = SubResource( 2 )

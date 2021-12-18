@@ -1,13 +1,13 @@
 [gd_scene load_steps=15 format=2]
 
-[ext_resource path="res://laser.gd" type="Script" id=1]
+[ext_resource path="res://laser_blue.gd" type="Script" id=1]
 [ext_resource path="res://laser_shader.tres" type="Shader" id=2]
 [ext_resource path="res://models/laser_2.obj" type="ArrayMesh" id=4]
 [ext_resource path="res://models/laser_1.obj" type="ArrayMesh" id=5]
 
 [sub_resource type="ShaderMaterial" id=1]
 shader = ExtResource( 2 )
-shader_param/color = Color( 1, 0.0235294, 0.0235294, 1 )
+shader_param/color = Color( 0.0235294, 0.74902, 1, 1 )
 
 [sub_resource type="VisualShaderNodeInput" id=2]
 input_name = "color"
@@ -90,7 +90,7 @@ tracks/0/keys = {
 "times": PoolRealArray( 0, 2 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( -360, 0, 0 ) ]
+"values": [ Vector3( 0, 0, 0 ), Vector3( 360, 0, 0 ) ]
 }
 tracks/1/type = "value"
 tracks/1/path = NodePath("laser_2:rotation_degrees")
@@ -102,7 +102,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0, 2 ),
 "transitions": PoolRealArray( 1, 1 ),
 "update": 0,
-"values": [ Vector3( 0, 0, 0 ), Vector3( 360, 0, 0 ) ]
+"values": [ Vector3( 0, 0, 0 ), Vector3( -360, 0, 0 ) ]
 }
 
 [node name="Laser" type="Spatial"]

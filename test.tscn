@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://light_manager.tscn" type="PackedScene" id=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "extends Spatial
+
+export(String, FILE, \"*.tscn,*.scn\") var level_scene;
+
+func _ready():
+	var level = load(level_scene);
+	
+	add_child(level.instance())
+
+"
+
+[node name="Spatial" type="Spatial"]
+script = SubResource( 1 )
+level_scene = "res://levels/c2_level1.tscn"
+
+[node name="light_nameger" parent="." instance=ExtResource( 2 )]
+
+[node name="player" parent="." instance=ExtResource( 1 )]

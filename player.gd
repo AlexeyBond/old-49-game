@@ -10,11 +10,23 @@ func set_color(c):
 	if not is_inside_tree():
 		return
 
-	$KinematicBody/CSGBox.material.albedo_color = c
-	
+	var m: SpatialMaterial = $KinematicBody/CSGBox.material;
+	m.albedo_color = c
+
 func get_color():
 	return $KinematicBody/CSGBox.material_override.albedo_color
 
+export var emission_color: Color setget set_emission_color, get_emission_color
+
+func set_emission_color(c):
+	if not is_inside_tree():
+		return
+
+	var m: SpatialMaterial = $KinematicBody/CSGBox.material;
+	m.emission = c
+
+func get_emission_color():
+	return $KinematicBody/CSGBox.material_override.emission
 
 func on_done_moving():
 	if state == 'moving':

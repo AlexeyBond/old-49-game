@@ -3,6 +3,7 @@ extends Node
 var target_state = true
 export var light_state: bool setget set_light_state, get_light_state;
 export var laser_state = true
+export var laser_blue_state = false
 
 var env_dark = preload("res://env_dark.tres")
 var env_default = preload("res://env_default.tres")

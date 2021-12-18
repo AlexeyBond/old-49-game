@@ -13,13 +13,21 @@ func _ready():
 	add_to_group('level_manager')
 	$Timer.start()
 
-func change_level(level):
-	if level_node:
-		remove_child(level_node)
+func level_completed():
+	if not level_node:
+		return
+
+	remove_child(level_node)
+	
+	if true: # TODO: Do iff completed
+		level_progress.mark_completed()
+	level_progress.write()
 		
-		if true: # TODO: Do iff completed
-			level_progress.mark_completed()
-		level_progress.write()
+	level_node = null
+
+func change_level(level):
+	level_completed()
+
 	level_node = load(level.level_scene).instance()
 	add_child(level_node)
 	level_meta = level
@@ -36,6 +44,8 @@ func change_level(level):
 	$Timer.start()
 
 func next_level():
+	level_completed()
+
 	var next = level_meta.get_next()
 	
 	while next:
@@ -60,7 +70,8 @@ func next_level():
 	chapter_completed()
 
 func chapter_completed():
-	pass
+	# TODO: To main menu(?)
+	to_chapter_menu()
 
 
 func _on_player_on_move():

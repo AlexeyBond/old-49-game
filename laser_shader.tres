@@ -1,6 +1,6 @@
 [gd_resource type="VisualShader" load_steps=2 format=2]
 
-[sub_resource type="VisualShaderNodeColorUniform" id=12]
+[sub_resource type="VisualShaderNodeColorUniform" id=1]
 uniform_name = "color"
 
 [resource]
@@ -32,11 +32,11 @@ void light() {
 
 }
 "
-graph_offset = Vector2( -343.85, 248.125 )
+graph_offset = Vector2( -363.623, 91.875 )
 modes/blend = 1
 modes/cull = 2
 modes/depth_draw = 2
 modes/specular = 4
-nodes/fragment/2/node = SubResource( 12 )
+nodes/fragment/2/node = SubResource( 1 )
 nodes/fragment/2/position = Vector2( -240, 260 )
 nodes/fragment/connections = PoolIntArray( 2, 0, 0, 0, 2, 0, 0, 5 )
