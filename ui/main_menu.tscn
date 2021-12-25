@@ -11,7 +11,11 @@ var chapter_entry_scn = preload(\"res://ui/chapter_entry.tscn\");
 var levels_list_scn = preload(\"res://ui/menu.tscn\");
 
 func update_chapter_list():
-	var list_container = $ScrollContainer/HBoxContainer
+	var list_container = $ScrollContainer/HBoxContainer/chapters_container
+	
+	for child in list_container.get_children():
+		child.queue_free()
+	
 	var meta_storage = $\"/root/metadata\"
 	var progress_storage = $\"/root/progress_storage\"
 	var chapters = meta_storage.get_children()
@@ -29,6 +33,9 @@ func update_chapter_list():
 		entry.connect(\"selected\", self, '_on_chapter_selected')
 
 func _ready():
+	$ScrollContainer/HBoxContainer/start_padding.rect_min_size.x = rect_size.x * 0.3
+	$ScrollContainer/HBoxContainer/end_padding.rect_min_size.x = rect_size.x * 0.3
+
 	update_chapter_list()
 
 func _on_chapter_selected(chapter_meta, chapter_progress):
@@ -38,6 +45,17 @@ func _on_chapter_selected(chapter_meta, chapter_progress):
 	
 	get_parent().add_child(levels_list)
 	queue_free()
+
+
+func _on_reset_score_button_pressed():
+	var meta_storage = $\"/root/metadata\"
+	var progress_storage = $\"/root/progress_storage\"
+	var chapters = meta_storage.get_children()
+	
+	for chapter in chapters:
+		progress_storage.erase_chapter_progress(chapter)
+	
+	update_chapter_list()
 "
 
 [node name="chapter_list" type="Control"]
@@ -62,25 +80,51 @@ __meta__ = {
 }
 
 [node name="HBoxContainer" type="HBoxContainer" parent="ScrollContainer"]
-margin_right = 1516.0
+margin_right = 1588.0
 margin_bottom = 200.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ChapterEntry" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
+[node name="start_padding" type="Control" parent="ScrollContainer/HBoxContainer"]
+margin_bottom = 200.0
 
-[node name="ChapterEntry2" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 304.0
-margin_right = 604.0
+[node name="chapters_container" type="HBoxContainer" parent="ScrollContainer/HBoxContainer"]
+margin_left = 4.0
+margin_right = 1584.0
+margin_bottom = 200.0
+custom_constants/separation = 20
 
-[node name="ChapterEntry3" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 608.0
-margin_right = 908.0
+[node name="ChapterEntry" parent="ScrollContainer/HBoxContainer/chapters_container" instance=ExtResource( 2 )]
 
-[node name="ChapterEntry4" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 912.0
-margin_right = 1212.0
+[node name="ChapterEntry2" parent="ScrollContainer/HBoxContainer/chapters_container" instance=ExtResource( 2 )]
+margin_left = 320.0
+margin_right = 620.0
 
-[node name="ChapterEntry5" parent="ScrollContainer/HBoxContainer" instance=ExtResource( 2 )]
-margin_left = 1216.0
-margin_right = 1516.0
+[node name="ChapterEntry3" parent="ScrollContainer/HBoxContainer/chapters_container" instance=ExtResource( 2 )]
+margin_left = 640.0
+margin_right = 940.0
+
+[node name="ChapterEntry4" parent="ScrollContainer/HBoxContainer/chapters_container" instance=ExtResource( 2 )]
+margin_left = 960.0
+margin_right = 1260.0
+
+[node name="ChapterEntry5" parent="ScrollContainer/HBoxContainer/chapters_container" instance=ExtResource( 2 )]
+margin_left = 1280.0
+margin_right = 1580.0
+
+[node name="end_padding" type="Control" parent="ScrollContainer/HBoxContainer"]
+margin_left = 1588.0
+margin_right = 1588.0
+margin_bottom = 200.0
+
+[node name="reset_score_button" type="Button" parent="."]
+margin_left = 16.3721
+margin_top = 15.1127
+margin_right = 197.372
+margin_bottom = 59.1127
+text = "Reset score"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="pressed" from="reset_score_button" to="." method="_on_reset_score_button_pressed"]

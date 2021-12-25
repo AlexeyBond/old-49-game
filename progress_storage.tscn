@@ -8,10 +8,13 @@ class ChapterProgressData extends Reference:
 	var chapter_meta
 	var resource_path: String
 	var data: Dictionary
+	
+	static func chapter_progress_file_path(chapter_meta_):
+		return \"user://progress/%s.json\" % [chapter_meta_.get_id()]
 
 	func _init(chapter_meta_):
 		self.chapter_meta = chapter_meta_
-		self.resource_path = \"user://progress/%s.json\" % [chapter_meta.get_id()]
+		self.resource_path = chapter_progress_file_path(chapter_meta)
 		self.data = self.read_()
 		self.fill_defaults_()
 
@@ -118,6 +121,10 @@ func _ready():
 
 func load_chapter_progress(chapter):
 	return ChapterProgressData.new(chapter)
+
+func erase_chapter_progress(chapter):
+	var dir = Directory.new()
+	dir.remove(ChapterProgressData.chapter_progress_file_path(chapter))
 "
 
 [node name="Node" type="Node"]

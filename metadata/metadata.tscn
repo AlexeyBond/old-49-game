@@ -90,6 +90,21 @@ script = ExtResource( 1 )
 level_scene = "res://levels/c2_level1.tscn"
 title = "Level 1"
 
+[node name="level4" type="Node" parent="chapter2"]
+script = ExtResource( 1 )
+level_scene = "res://levels/c2_level4.tscn"
+title = "Level 4"
+
+[node name="level5" type="Node" parent="chapter2"]
+script = ExtResource( 1 )
+level_scene = "res://levels/c2_level5.tscn"
+title = "Level 5"
+
+[node name="level6" type="Node" parent="chapter2"]
+script = ExtResource( 1 )
+level_scene = "res://levels/c2_level6.tscn"
+title = "Level 6"
+
 [node name="chapter3" type="Node" parent="."]
 script = ExtResource( 2 )
 title = "Chapter 2"

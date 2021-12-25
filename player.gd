@@ -123,7 +123,7 @@ func on_restart():
 	$KinematicBody.translation = Vector3.ZERO
 	$camera_wrapper.translation = Vector3.ZERO
 	next_move = null
-	get_tree().call_group('light_manager', 'force_on')
+	get_tree().call_group('restart_observer', 'on_level_restarted')
 
 func request_next_level():
 	get_tree().call_group('level_manager', 'next_level')

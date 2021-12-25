@@ -104,8 +104,8 @@ func _gui_input(event):
 
 	if not (event is InputEventMouseButton):
 		return
-	
-	if not event.pressed:
+
+	if not event.pressed or event.button_index != BUTTON_LEFT:
 		return
 
 	emit_signal(\"selected\", chapter_meta, chapter_progress)

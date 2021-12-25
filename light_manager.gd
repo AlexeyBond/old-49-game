@@ -37,8 +37,12 @@ func force_on():
 	target_state = true
 	$AnimationPlayer.play("force_on")
 
+func on_level_restarted():
+	force_on()
+
 func _ready():
 	add_to_group('light_manager')
+	add_to_group('restart_observer')
 	force_on()
 
 func _process(_delta):
