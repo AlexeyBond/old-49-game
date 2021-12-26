@@ -33,7 +33,7 @@ func on_level_restarted():
 	reset_state()
 
 func move_items(target_state):
-	var tween: Tween = $Tween
+	var tween = $Tween
 
 	for child_ in get_children():
 		var child: Node = child_
@@ -42,7 +42,7 @@ func move_items(target_state):
 		
 		var node: Spatial = child.get_node('object')
 		var target_transform
-		if not state:
+		if not target_state:
 			target_transform = (child as Spatial).global_transform
 		else:
 			target_transform = (child.get_node('target') as Spatial).global_transform
@@ -56,10 +56,10 @@ func move_items(target_state):
 			Tween.TRANS_LINEAR,
 			Tween.EASE_IN_OUT,
 			0.5
-		)
+		);
 
-	tween.start()
+	tween.start();
 
-func _on_Area_body_entered(body):
+func _on_Area_body_entered(_body):
 	state = not state
 	move_items(state)
