@@ -17,7 +17,7 @@ func _ready():
 
 [node name="Spatial" type="Spatial"]
 script = SubResource( 1 )
-level_scene = "res://levels/c2_level3.tscn"
+level_scene = "res://levels/c2_level9.tscn"
 
 [node name="light_nameger" parent="." instance=ExtResource( 2 )]
 
